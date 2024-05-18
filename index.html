@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单搜索页面</title>
+</head>
+<body>
+    <h1>简单搜索页面</h1>
+    <form method="GET">
+        <label for="search">搜索内容：</label>
+        <input type="text" id="search" name="search">
+        <button type="submit">搜索</button>
+    </form>
+
+    <!-- 结果显示区 -->
+    <h2>搜索结果：</h2>
+    <div id="result"></div>
+
+    <script>
+        // 解析URL参数显示搜索结果
+        window.onload = function() {
+            var params = new URLSearchParams(window.location.search);
+            var search = params.get('search');
+            if (search) {
+                document.getElementById('result').innerHTML = '您搜索的关键词是: ' + search;
+            }
+        }
+    </script>
+</body>
+</html>
