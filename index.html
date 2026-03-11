@@ -3,173 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 GitHub 个人主页</title>
+    <title>Mightstartariot | Personal Space</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-main: #c9d1d9;
-            --text-dim: #8b949e;
-            --accent: #58a6ff;
-            --border: #30363d;
+            --primary: #79c0ff;
+            --bg: #0d1117;
+            --glass: rgba(22, 27, 34, 0.8);
+            --border: rgba(48, 54, 61, 0.8);
         }
+
+        * { margin: 0; padding: 0; box-box: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: #c9d1d9;
+            overflow-x: hidden;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            line-height: 1.6;
+            justify-content: center;
         }
 
+        /* --- 动态星空背景 --- */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        }
+
+        /* --- 容器 --- */
         .container {
-            max-width: 800px;
-            width: 90%;
-            padding: 40px 0;
+            max-width: 900px;
+            width: 95%;
+            padding: 50px 20px;
         }
 
-        /* 个人信息部分 */
-        header {
+        /* --- 个人卡片 (毛玻璃) --- */
+        .profile-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
             text-align: center;
-            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
         }
 
         .avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 2px solid var(--border);
-            margin-bottom: 15px;
+            border: 3px solid var(--primary);
+            padding: 5px;
+            transition: transform 0.5s;
+        }
+        .avatar:hover { transform: rotate(360deg); }
+
+        h1 { font-size: 2.5em; color: white; margin: 15px 0; }
+
+        /* 打字机动画 */
+        .typing {
+            font-family: monospace;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            margin: 0 auto;
+            animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
         }
 
-        h1 { margin-bottom: 5px; color: white; }
-        .bio { color: var(--text-dim); font-size: 1.1em; }
-
-        /* 项目卡片 */
-        .section-title {
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-            margin-top: 40px;
-        }
-
-        .grid {
+        /* --- 实时数据看板 --- */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
         }
-
-        .card {
-            background: var(--card-bg);
+        .stat-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 20px;
-            transition: transform 0.2s, border-color 0.2s;
+        }
+        .stat-num { display: block; font-size: 1.5em; color: var(--primary); font-weight: bold; }
+        .stat-label { font-size: 0.8em; color: #8b949e; }
+
+        /* --- 按钮 --- */
+        .btn-group { display: flex; justify-content: center; gap: 15px; }
+        .btn {
+            padding: 10px 25px;
+            border-radius: 30px;
             text-decoration: none;
-            color: inherit;
+            color: white;
+            background: #238636;
+            transition: 0.3s;
+            font-weight: bold;
         }
+        .btn:hover { background: #2ea043; transform: scale(1.05); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
+        .btn-outline:hover { background: var(--border); }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
+        /* 动画定义 */
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary) } }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .typing { font-size: 0.9em; white-space: normal; border: none; animation: none; }
         }
-
-        .card h3 {
-            margin: 0 0 10px 0;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-        }
-
-        .card h3 i { margin-right: 10px; font-size: 0.8em; }
-
-        .card p {
-            font-size: 0.9em;
-            color: var(--text-dim);
-            margin-bottom: 15px;
-        }
-
-        .tags {
-            font-size: 0.8em;
-            display: flex;
-            gap: 10px;
-        }
-
-        .tag {
-            display: flex;
-            align-items: center;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        /* 社交图标 */
-        .social-links {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .social-links a {
-            color: var(--text-dim);
-            font-size: 1.5em;
-            transition: color 0.2s;
-        }
-
-        .social-links a:hover { color: var(--accent); }
-
     </style>
 </head>
 <body>
 
+<div class="stars"></div>
+
 <div class="container">
-    <header>
-        <img src="https://github.com/github.png" alt="Avatar" class="avatar">
-        <h1>你的名字 / Your Name</h1>
-        <p class="bio">全栈开发爱好者 | 终身学习者 | 正在探索 AI 与 Web3</p>
-        
-        <div class="social-links">
-            <a href="你的GitHub链接" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="你的推特/微博" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="mailto:your-email@example.com"><i class="fas fa-envelope"></i></a>
+    <div class="profile-card">
+        <img src="https://github.com/mightstartariot.png" alt="Avatar" class="avatar">
+        <h1>Mightstartariot</h1>
+        <div style="display: inline-block;">
+            <p class="typing">Hello, I'm a developer exploring the future.</p>
         </div>
-    </header>
 
-    <h2 class="section-title">精选项目 / Featured Projects</h2>
-    
-    <div class="grid">
-        <a href="项目链接" class="card">
-            <h3><i class="fas fa-book"></i> Awesome-Project</h3>
-            <p>这是一个非常有意思的开源项目，解决了某个痛点问题。</p>
-            <div class="tags">
-                <span class="tag"><span class="dot" style="background: #f1e05a;"></span> JavaScript</span>
-                <span class="tag"><i class="far fa-star"></i> 128</span>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-num" id="repo-count">...</span>
+                <span class="stat-label">Repositories</span>
             </div>
-        </a>
+            <div class="stat-item">
+                <span class="stat-num" id="follower-count">...</span>
+                <span class="stat-label">Followers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">2026</span>
+                <span class="stat-label">Year</span>
+            </div>
+        </div>
 
-        <a href="项目链接" class="card">
-            <h3><i class="fas fa-book"></i> Python-Tools</h3>
-            <p>一组用于自动化处理数据的脚本集。</p>
-            <div class="tags">
-                <span class="tag"><span class="dot" style="background: #3572A5;"></span> Python</span>
-                <span class="tag"><i class="far fa-star"></i> 85</span>
-            </div>
-        </a>
+        <div class="btn-group">
+            <a href="https://github.com/mightstartariot" class="btn" target="_blank">
+                <i class="fab fa-github"></i> Follow Me
+            </a>
+            <a href="mailto:your-email@example.com" class="btn btn-outline">
+                <i class="fas fa-envelope"></i> Contact
+            </a>
+        </div>
     </div>
 
-    <footer style="text-align: center; margin-top: 60px; color: var(--text-dim); font-size: 0.8em;">
-        © 2026 Crafted with ❤️ using HTML/CSS
-    </footer>
-</div>
+    </div>
+
+<script>
+    // --- 核心小功能：调用 GitHub API 实时获取数据 ---
+    async function getGitHubStats() {
+        const username = 'mightstartariot';
+        try {
+            const response = await fetch(`https://api.github.com/users/${username}`);
+            const data = await response.json();
+            
+            document.getElementById('repo-count').innerText = data.public_repos || '0';
+            document.getElementById('follower-count').innerText = data.followers || '0';
+        } catch (error) {
+            console.error('获取数据失败:', error);
+            document.getElementById('repo-count').innerText = 'Err';
+            document.getElementById('follower-count').innerText = 'Err';
+        }
+    }
+
+    getGitHubStats();
+</script>
 
 </body>
 </html>
