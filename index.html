@@ -1,31 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简单搜索页面</title>
+    <title>我的 GitHub 个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --border: #30363d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 40px 0;
+        }
+
+        /* 个人信息部分 */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        h1 { margin-bottom: 5px; color: white; }
+        .bio { color: var(--text-dim); font-size: 1.1em; }
+
+        /* 项目卡片 */
+        .section-title {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i { margin-right: 10px; font-size: 0.8em; }
+
+        .card p {
+            font-size: 0.9em;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+
+        .tags {
+            font-size: 0.8em;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tag {
+            display: flex;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        /* 社交图标 */
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-dim);
+            font-size: 1.5em;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover { color: var(--accent); }
+
+    </style>
 </head>
 <body>
-    <h1>简单搜索页面</h1>
-    <form method="GET">
-        <label for="search">搜索内容：</label>
-        <input type="text" id="search" name="search">
-        <button type="submit">搜索</button>
-    </form>
 
-    <!-- 结果显示区 -->
-    <h2>搜索结果：</h2>
-    <div id="result"></div>
+<div class="container">
+    <header>
+        <img src="https://github.com/github.png" alt="Avatar" class="avatar">
+        <h1>你的名字 / Your Name</h1>
+        <p class="bio">全栈开发爱好者 | 终身学习者 | 正在探索 AI 与 Web3</p>
+        
+        <div class="social-links">
+            <a href="你的GitHub链接" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="你的推特/微博" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="mailto:your-email@example.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </header>
 
-    <script>
-        // 解析URL参数显示搜索结果
-        window.onload = function() {
-            var params = new URLSearchParams(window.location.search);
-            var search = params.get('search');
-            if (search) {
-                document.getElementById('result').innerHTML = '您搜索的关键词是: ' + search;
-            }
-        }
-    </script>
+    <h2 class="section-title">精选项目 / Featured Projects</h2>
+    
+    <div class="grid">
+        <a href="项目链接" class="card">
+            <h3><i class="fas fa-book"></i> Awesome-Project</h3>
+            <p>这是一个非常有意思的开源项目，解决了某个痛点问题。</p>
+            <div class="tags">
+                <span class="tag"><span class="dot" style="background: #f1e05a;"></span> JavaScript</span>
+                <span class="tag"><i class="far fa-star"></i> 128</span>
+            </div>
+        </a>
+
+        <a href="项目链接" class="card">
+            <h3><i class="fas fa-book"></i> Python-Tools</h3>
+            <p>一组用于自动化处理数据的脚本集。</p>
+            <div class="tags">
+                <span class="tag"><span class="dot" style="background: #3572A5;"></span> Python</span>
+                <span class="tag"><i class="far fa-star"></i> 85</span>
+            </div>
+        </a>
+    </div>
+
+    <footer style="text-align: center; margin-top: 60px; color: var(--text-dim); font-size: 0.8em;">
+        © 2026 Crafted with ❤️ using HTML/CSS
+    </footer>
+</div>
+
 </body>
 </html>
