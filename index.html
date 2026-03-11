@@ -6,171 +6,210 @@
     <title>Mightstartariot | Personal Space</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* 全局变量定义 */
         :root {
             --primary: #79c0ff;
-            --bg: #0d1117;
-            --glass: rgba(22, 27, 34, 0.8);
-            --border: rgba(48, 54, 61, 0.8);
+            --accent: #58a6ff;
+            --glass: rgba(13, 17, 23, 0.7);
+            --border: rgba(240, 246, 252, 0.1);
+            --text: #f0f6fc;
         }
 
-        * { margin: 0; padding: 0; box-box: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background-color: var(--bg);
-            color: #c9d1d9;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            color: var(--text);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
+            align-items: center;
+            /* 默认动态渐变背景，作为图片加载前的备选 */
+            background: linear-gradient(-45deg, #0d1117, #161b22, #0d47a1, #010409);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            /* 图片背景设置 */
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                              url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80');
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
         }
 
-        /* --- 动态星空背景 --- */
-        .stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* --- 容器 --- */
-        .container {
-            max-width: 900px;
-            width: 95%;
-            padding: 50px 20px;
-        }
-
-        /* --- 个人卡片 (毛玻璃) --- */
-        .profile-card {
+        /* 核心卡片容器 */
+        .glass-card {
+            width: 90%;
+            max-width: 500px;
             background: var(--glass);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        /* 头像动效 */
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            padding: 4px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .avatar:hover { transform: scale(1.1) rotate(10deg); }
+
+        h1 { font-size: 2rem; margin-bottom: 10px; letter-spacing: -0.5px; }
+
+        /* 打字机文字 */
+        .bio {
+            font-size: 1rem;
+            color: #8b949e;
+            height: 1.5rem;
             margin-bottom: 30px;
         }
 
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            padding: 5px;
-            transition: transform 0.5s;
+        /* 统计数据布局 */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 35px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 15px 0;
         }
-        .avatar:hover { transform: rotate(360deg); }
+        .stat-box span { display: block; }
+        .stat-val { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; margin-top: 5px; }
 
-        h1 { font-size: 2.5em; color: white; margin: 15px 0; }
-
-        /* 打字机动画 */
-        .typing {
-            font-family: monospace;
-            border-right: 2px solid var(--primary);
-            white-space: nowrap;
-            overflow: hidden;
-            margin: 0 auto;
-            animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
-        }
-
-        /* --- 实时数据看板 --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 30px 0;
-        }
-        .stat-item {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-        .stat-num { display: block; font-size: 1.5em; color: var(--primary); font-weight: bold; }
-        .stat-label { font-size: 0.8em; color: #8b949e; }
-
-        /* --- 按钮 --- */
-        .btn-group { display: flex; justify-content: center; gap: 15px; }
-        .btn {
-            padding: 10px 25px;
-            border-radius: 30px;
+        /* 社交按钮 */
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #0d1117;
             text-decoration: none;
-            color: white;
-            background: #238636;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
             transition: 0.3s;
-            font-weight: bold;
         }
-        .btn:hover { background: #2ea043; transform: scale(1.05); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); }
-        .btn-outline:hover { background: var(--border); }
-
-        /* 动画定义 */
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary) } }
-
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .typing { font-size: 0.9em; white-space: normal; border: none; animation: none; }
+        .social-btn:hover {
+            background: white;
+            box-shadow: 0 0 20px rgba(121, 192, 255, 0.4);
         }
+
+        /* 底部切换按钮 */
+        .bg-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .bg-switcher:hover { background: var(--primary); color: #000; }
+
     </style>
 </head>
 <body>
 
-<div class="stars"></div>
-
-<div class="container">
-    <div class="profile-card">
+<div class="glass-card">
+    <div class="avatar-container">
         <img src="https://github.com/mightstartariot.png" alt="Avatar" class="avatar">
-        <h1>Mightstartariot</h1>
-        <div style="display: inline-block;">
-            <p class="typing">Hello, I'm a developer exploring the future.</p>
-        </div>
+    </div>
+    
+    <h1>Mightstartariot</h1>
+    <p class="bio" id="typing-text"></p>
 
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-num" id="repo-count">...</span>
-                <span class="stat-label">Repositories</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num" id="follower-count">...</span>
-                <span class="stat-label">Followers</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num">2026</span>
-                <span class="stat-label">Year</span>
-            </div>
+    <div class="stats">
+        <div class="stat-box">
+            <span class="stat-val" id="repo-count">--</span>
+            <span class="stat-label">Repos</span>
         </div>
-
-        <div class="btn-group">
-            <a href="https://github.com/mightstartariot" class="btn" target="_blank">
-                <i class="fab fa-github"></i> Follow Me
-            </a>
-            <a href="mailto:your-email@example.com" class="btn btn-outline">
-                <i class="fas fa-envelope"></i> Contact
-            </a>
+        <div class="stat-box">
+            <span class="stat-val" id="follower-count">--</span>
+            <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-val">2026</span>
+            <span class="stat-label">Status</span>
         </div>
     </div>
 
-    </div>
+    <a href="https://github.com/mightstartariot" class="social-btn" target="_blank">
+        <i class="fab fa-github"></i> Visit My GitHub
+    </a>
+</div>
+
+<button class="bg-switcher" onclick="changeBg()" title="切换背景">🎨</button>
 
 <script>
-    // --- 核心小功能：调用 GitHub API 实时获取数据 ---
-    async function getGitHubStats() {
-        const username = 'mightstartariot';
-        try {
-            const response = await fetch(`https://api.github.com/users/${username}`);
-            const data = await response.json();
-            
-            document.getElementById('repo-count').innerText = data.public_repos || '0';
-            document.getElementById('follower-count').innerText = data.followers || '0';
-        } catch (error) {
-            console.error('获取数据失败:', error);
-            document.getElementById('repo-count').innerText = 'Err';
-            document.getElementById('follower-count').innerText = 'Err';
+    // 1. 自动打字机效果
+    const text = "Building the future, one commit at a time.";
+    let index = 0;
+    function type() {
+        if (index < text.length) {
+            document.getElementById("typing-text").innerHTML += text.charAt(index);
+            index++;
+            setTimeout(type, 80);
         }
     }
+    type();
 
-    getGitHubStats();
+    // 2. 实时获取 GitHub 数据
+    async function fetchStats() {
+        const user = 'mightstartariot';
+        try {
+            const res = await fetch(`https://api.github.com/users/${user}`);
+            const data = await res.json();
+            document.getElementById('repo-count').innerText = data.public_repos;
+            document.getElementById('follower-count').innerText = data.followers;
+        } catch (e) {
+            console.error("API Error");
+        }
+    }
+    fetchStats();
+
+    // 3. 背景切换逻辑
+    const bgImages = [
+        'https://images.unsplash.com/photo-1451187580459-43490279c0fa',
+        'https://images.unsplash.com/photo-1518770660439-4636190af475',
+        'https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2',
+        'https://images.unsplash.com/photo-1461749280684-dccba630e2f6'
+    ];
+    let bgIndex = 0;
+    function changeBg() {
+        bgIndex = (bgIndex + 1) % bgImages.length;
+        document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bgImages[bgIndex]}?auto=format&fit=crop&w=1920&q=80')`;
+    }
 </script>
 
 </body>
